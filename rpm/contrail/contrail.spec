@@ -710,6 +710,7 @@ Requires:           contrail-lib >= %{_verstr}-%{_relstr}
 Requires:           protobuf
 Requires:           python-contrail >= %{_verstr}-%{_relstr}
 Requires:           python2-future
+Requires:           python2-futures
 %if 0%{?rhel} < 8
 Requires:           redis >= 2.6.13-1
 Requires:           python-redis >= 2.10.0
