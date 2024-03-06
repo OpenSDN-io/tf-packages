@@ -30,16 +30,11 @@ URL:              http://www.juniper.net/
 Vendor:           Juniper Networks Inc
 
 Requires:         contrail-lib >= %{_verstr}-%{_relstr}
-Requires:         python-contrail >= %{_verstr}-%{_relstr}
+Requires:         python3-contrail >= %{_verstr}-%{_relstr}
 %if 0%{?rhel} < 8
 Requires:         ntp
-Requires:         python-bottle >= 0.11.6
-Requires:         python-psutil
-Requires:         PyYAML
 %endif
-Requires:         python2-setuptools
-# tpc
-Requires:         python-configparser
+Requires:         python3-setuptools
 
 BuildRequires: bison
 BuildRequires: boost-devel = 1.53.0
@@ -85,22 +80,18 @@ last=$(ls -1 --sort=v -r %{_build_dist}/nodemgr/dist/*.tar.gz | head -n 1| xargs
 echo "DBG: %{_build_dist}/nodemgr/dist/ last tar.gz = $last"
 tar zxf %{_build_dist}/nodemgr/dist/$last
 pushd ${last//\.tar\.gz/}
-%{__python} setup.py install --root=%{buildroot} --no-compile
+%{__python3} setup.py install --root=%{buildroot} --no-compile
 popd
 
 %files
 %defattr(-,root,root,-)
 %{_bindir}/contrail-nodemgr
-%{python_sitelib}/nodemgr
-%{python_sitelib}/nodemgr-*
+%{python3_sitelib}/nodemgr
+%{python3_sitelib}/nodemgr-*
 
-%if 0%{?rhel} >= 8
 %post
 set -e
-%{__python} -m pip install --no-compile \
-  "bottle >= 0.11.6" \
-  psutil \
-  "PyYAML>=5.1"
-%endif
+%{__python3} -m pip install --no-compile \
+  'bottle>= 0.12.21' 'psutil!=5.5.0,!=5.5.1,>=0.6.0' 'gevent<1.5.0' 'fysom' 'PyYAML>=5.1,<6' 'netaddr<1'
 
 %changelog
