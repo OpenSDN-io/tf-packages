@@ -1,9 +1,0 @@
-- project:
-    name: tungstenfabric/tf-packages
-    check:
-      jobs:
-        - lint-rpm-specs
-    gate:
-      jobs:
-        - lint-rpm-specs
-
