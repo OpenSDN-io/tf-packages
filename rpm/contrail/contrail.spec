@@ -730,10 +730,6 @@ Requires:           python-kazoo == 2.7.0
 Requires:           python-pycassa
 Requires:           python-sseclient >= 0.0.26
 Requires:           xmltodict >= 0.7.0
-%if 0%{?rhel} == 7
-# has incompatible deps for el8
-Requires:           python-cassandra-driver < 3.27
-%endif
 
 %description analytics
 Contrail Analytics package
@@ -776,17 +772,18 @@ This information includes statistics,logs, events, and errors.
 /usr/share/mibs/netsnmp
 /etc/contrail/snmp.conf
 
-%if 0%{?rhel} >= 8
 %post analytics
 set -e
+%if 0%{?rhel} >= 8
 %{__python} -m pip install --no-compile \
   amqp \
   "redis>=2.10.0,<=3.4.1" \
   "psutil>=0.6.0" \
   prettytable \
-  "cassandra-driver<3.27" \
   stevedore
 %endif
+%{__python} -m pip install --no-compile \
+  "cassandra-driver>=3.16,<3.27"
 
 
 %package dns
@@ -972,10 +969,6 @@ Requires:          python2-bitarray
 Requires:          python-attrdict
 Requires:          python-pycassa
 Requires:          python-fysom
-%if 0%{?rhel} < 8
-# incompatible deps for el8
-Requires:          python-cassandra-driver < 3.27
-%endif
 
 %description -n python-contrail
 Contrail Virtual Router utils package
@@ -997,18 +990,19 @@ in the OpenContrail API server.
 %config(noreplace) %{_contrailetc}/vnc_api_lib.ini
 /etc/bash_completion.d/bashrc_contrail_cli
 
-%if 0%{?rhel} >= 8
 %post -n python-contrail
 set -e
+%if 0%{?rhel} >= 8
 %{__python} -m pip install --no-compile \
   "gevent>=1.0,<1.5.0" \
   "greenlet<2.0.0" \
   kombu \
-  "cassandra-driver<3.27" \
   simplejson \
   "six>=1.12" \
   stevedore
 %endif
+%{__python} -m pip install --no-compile \
+  "cassandra-driver>=3.16,<3.27"
 
 
 %package -n python3-contrail
