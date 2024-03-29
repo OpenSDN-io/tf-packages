@@ -91,7 +91,6 @@ BuildRequires: python3-devel
 BuildRequires: python-devel
 BuildRequires: python-lxml
 BuildRequires: python-sphinx
-BuildRequires: scons
 %else
 BuildRequires: python2-devel
 BuildRequires: python2-lxml

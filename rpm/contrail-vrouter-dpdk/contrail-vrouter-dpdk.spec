@@ -60,7 +60,6 @@ BuildRequires: liburcu-devel
 BuildRequires: numactl-devel
 BuildRequires: libnl3-devel
 %if 0%{?rhel} < 8
-BuildRequires: scons
 %endif
 BuildRequires: gcc
 BuildRequires: flex

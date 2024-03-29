@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #
 # Copyright (c) 2016 Juniper Networks, Inc. All rights reserved.
 #
