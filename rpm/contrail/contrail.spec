@@ -257,9 +257,7 @@ Group:              Applications/System
 
 Requires:           contrail-vrouter-agent >= %{_verstr}-%{_relstr}
 Requires:           contrail-lib >= %{_verstr}-%{_relstr}
-Requires:           python2-future
 # tpc
-Requires:           python-configparser
 Requires:           xmltodict >= 0.7.0
 
 %description vrouter
@@ -347,15 +345,12 @@ set -e
 Summary:            Contrail vrouter api
 
 Group:              Applications/System
-Requires:           python2-future
-# tpc
-Requires:           python-configparser
 
 %description -n python-contrail-vrouter-api
 Contrail Virtual Router apis package
 
 %files -n python-contrail-vrouter-api
-%{python_sitelib}/contrail_vrouter_api*
+%{python3_sitelib}/contrail_vrouter_api*
 
 %package tools
 Summary: Contrail tools
@@ -417,14 +412,7 @@ Summary:            Contrail vRouter
 Group:              Applications/System
 
 Requires:           contrail-lib >= %{_verstr}-%{_relstr}
-%if 0%{?rhel} < 8
-Requires:           python-paramiko
-Requires:           python2-passlib
-%endif
 Requires:           xmltodict >= 0.7.0
-Requires:           python2-future
-# tpc
-Requires:           python-configparser
 
 %description vrouter-agent
 Contrail Virtual Router Agent package
@@ -443,16 +431,16 @@ package provides the contrail-vrouter user space agent.
 %{_bindir}/contrail-toragent-cleanup
 %{_bindir}/contrail-vrouter-agent-health-check.py
 %{_bindir}/contrail_crypt_tunnel_client.py
-%{python_sitelib}/contrail_vrouter_provisioning*
-%{python_sitelib}/ContrailVrouterCli*
+%{python3_sitelib}/contrail_vrouter_provisioning*
+%{python3_sitelib}/ContrailVrouterCli*
 
-%if 0%{?rhel} >= 8
 %post vrouter-agent
 set -e
-%{__python} -m pip install --no-compile \
+%{__python3} -m pip install --no-compile \
   paramiko \
-  passlib
-%endif
+  passlib \
+  xmltodict
+
 
 
 %package control
@@ -515,45 +503,36 @@ Group:              Applications/System
 
 Requires:           iptables
 Requires:           iproute >= 3.1.0
-Requires:           python2-requests >= 2.20.0
-Requires:           python2-future
-# tpc
-Requires:           python-configparser
-%if 0%{?rhel} < 8
-Requires:           python-unittest2
-Requires:           python-eventlet < 0.19.0
-Requires:           python-enum34
-Requires:           python-keystoneclient
-Requires:           python-barbicanclient <= 5.3
-Requires:           python-pyOpenSSL
-# tpc bin, but conflict for el8
-Requires:           python2-docker
-# tpc bin, but conflict for el8
-Requires:           python-websocket-client >= 0.32.0
-%endif
+Requires:           python3-devel
+Requires:           gcc-c++
+
 
 %description -n python-opencontrail-vrouter-netns
 Contrail Virtual Router NetNS package
 
 %files -n python-opencontrail-vrouter-netns
 %defattr(-,root,root)
-%{python_sitelib}/opencontrail_vrouter_*
+%{python3_sitelib}/opencontrail_vrouter_*
 %{_bindir}/opencontrail-vrouter-*
 /etc/sudoers.d/contrail-lbaas
 
-%if 0%{?rhel} >= 8
 %post -n python-opencontrail-vrouter-netns
 set -e
-%{__python} -m pip install --no-compile \
+%{__python3} -m pip install --upgrade pip
+%{__python3} -m pip install --no-compile \
+  "setuptools_rust" \
+  "cython<3.0" \
+  "netaddr<1" \
+  "six" \
+  "requests" \
   "python-barbicanclient<=5.3" \
   "docker==2.4.2" \
-  enum34 \
-  "eventlet < 0.19.0" \
-  python-keystoneclient \
-  pyOpenSSL \
-  unittest2 \
+  "enum34" \
+  "eventlet" \
+  "python-keystoneclient" \
+  "pyOpenSSL" \
+  "unittest2" \
   "websocket-client>=0.32.0"
-%endif
 
 
 %package lib
