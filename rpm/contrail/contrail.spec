@@ -729,6 +729,8 @@ Requires:           python-kazoo == 2.7.0
 Requires:           python-pycassa
 Requires:           python-sseclient >= 0.0.26
 Requires:           xmltodict >= 0.7.0
+# for cassandra-driver
+Requires:           Cython
 
 %description analytics
 Contrail Analytics package
@@ -968,6 +970,8 @@ Requires:          python2-bitarray
 Requires:          python-attrdict
 Requires:          python-pycassa
 Requires:          python-fysom
+# for cassandra-driver
+Requires:          Cython
 
 %description -n python-contrail
 Contrail Virtual Router utils package
