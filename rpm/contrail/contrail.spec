@@ -90,7 +90,6 @@ BuildRequires: python3-devel
 %if 0%{?rhel} < 8
 BuildRequires: python-devel
 BuildRequires: python-lxml
-BuildRequires: python-sphinx
 %else
 BuildRequires: python2-devel
 BuildRequires: python2-lxml
