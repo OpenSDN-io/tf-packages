@@ -881,13 +881,15 @@ This package contains the kubernetes network management modules.
 %{python_sitelib}/kube_manager*
 %{_bindir}/contrail-kube-manager
 
-%if 0%{?rhel} >= 8
 %post kube-manager
 set -e
+%if 0%{?rhel} >= 8
 %{__python} -m pip install --no-compile \
   enum34 \
   "gevent>=1.0,<1.5.0"
 %endif
+%{__python} -m pip install --no-compile \
+  "cassandra-driver>=3.16,<3.27"
 
 
 %package k8s-cni
@@ -942,6 +944,7 @@ Requires:          python-simplejson
 Requires:          python2-six
 %endif
 Requires:          python2-future
+Requires:          python2-futures
 # tpc bin
 Requires:          python2-bottle >= 0.11.6
 Requires:          python2-bitarray
