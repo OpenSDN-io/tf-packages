@@ -564,8 +564,6 @@ Requires:           python-attrdict
 Requires:           python-configparser
 Requires:           python-kazoo == 2.7.0
 Requires:           python-pyhash
-Requires:           python-pycassa
-Requires:           python-thrift >= 0.9.1
 Requires:           xmltodict >= 0.7.0
 %if 0%{?rhel} < 8
 Requires:           python-gevent >= 1.0
@@ -705,7 +703,6 @@ Requires:           net-snmp-python
 Requires:           python-configparser
 Requires:           python-kafka >= 1.4.0
 Requires:           python-kazoo == 2.7.0
-Requires:           python-pycassa
 Requires:           python-sseclient >= 0.0.26
 Requires:           xmltodict >= 0.7.0
 # for cassandra-driver
@@ -950,7 +947,6 @@ Requires:          python2-bottle >= 0.11.6
 Requires:          python2-bitarray
 # tpc
 Requires:          python-attrdict
-Requires:          python-pycassa
 Requires:          python-fysom
 # for cassandra-driver
 Requires:          Cython
@@ -1011,7 +1007,6 @@ Obsoletes:         contrail-api-lib <= 0.0.1
 #Requires:          python3-fysom
 #Requires:          python3-greenlet < 2.0.0
 #Requires:          python3-stevedore
-#Requires:          python3-pycassa
 #Requires:          python3-attrdict
 #Requires:          python-bitarray
 
