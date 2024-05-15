@@ -683,28 +683,19 @@ Group:              Applications/System
 
 Requires:           contrail-lib >= %{_verstr}-%{_relstr}
 Requires:           protobuf
-Requires:           python-contrail >= %{_verstr}-%{_relstr}
-Requires:           python2-future
-Requires:           python2-futures
-%if 0%{?rhel} < 8
+Requires:           python3-contrail >= %{_verstr}-%{_relstr}
 Requires:           redis >= 2.6.13-1
-Requires:           python-redis >= 2.10.0
-Requires:           python-psutil >= 0.6.0
-Requires:           python-prettytable
-Requires:           python-amqp
-Requires:           python-stevedore
-%endif
 #tpc
 Requires:           cassandra-cpp-driver
 Requires:           grok
 Requires:           libzookeeper
 Requires:           librdkafka1 >= 1.5.0
-Requires:           net-snmp-python
-Requires:           python-configparser
-Requires:           python-kafka >= 1.4.0
-Requires:           python-kazoo == 2.7.0
-Requires:           python-sseclient >= 0.0.26
+Requires:           python3-net-snmp
 Requires:           xmltodict >= 0.7.0
+Requires:           python3-devel
+# TODO: Remove gcc requirements
+Requires:           gcc-c++
+Requires:           gcc
 # for cassandra-driver
 Requires:           Cython
 
@@ -732,10 +723,10 @@ This information includes statistics,logs, events, and errors.
 %attr(755, root, root) %{_bindir}/contrail-query-engine*
 %attr(755, root, root) %{_bindir}/contrail-analytics-api*
 %attr(755, root, root) %{_bindir}/contrail-alarm-gen*
-%{python_sitelib}/opserver*
-%{python_sitelib}/tf_snmp_collector*
-%{python_sitelib}/tf_topology*
-%{python_sitelib}/ContrailAnalyticsCli*
+%{python3_sitelib}/opserver*
+%{python3_sitelib}/tf_snmp_collector*
+%{python3_sitelib}/tf_topology*
+%{python3_sitelib}/ContrailAnalyticsCli*
 %{_bindir}/contrail-logs
 %{_bindir}/contrail-flows
 %{_bindir}/contrail-sessions
@@ -751,16 +742,19 @@ This information includes statistics,logs, events, and errors.
 
 %post analytics
 set -e
-%if 0%{?rhel} >= 8
-%{__python} -m pip install --no-compile \
-  amqp \
-  "redis>=2.10.0,<=3.4.1" \
+# TODO: replace with setup from requirements.txt
+%{__python3} -m pip install --no-compile \
+  "amqp" \
+  "redis>=2.10.0" \
   "psutil>=0.6.0" \
-  prettytable \
-  stevedore
-%endif
-%{__python} -m pip install --no-compile \
-  "cassandra-driver>=3.16,<3.27"
+  "prettytable" \
+  "future" \
+  "stevedore<=3.3.0" \
+  "cassandra-driver>=3.16,<3.27" \
+  "stevedore<=3.3.0" \
+  "kafka" \
+  "kazoo == 2.7.0" \
+  "sseclient"
 
 
 %package dns
