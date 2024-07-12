@@ -853,34 +853,33 @@ Summary:            Kubernetes network manager
 
 Group:              Applications/System
 
-Requires:    python-contrail >= %{_verstr}-%{_relstr}
-%if 0%{?rhel} < 8
-Requires:    python-gevent >= 1.0
-Requires:    python-enum34
-%endif
-Requires:    python2-requests >= 2.20.0
-Requires:    python2-future
-# tpc
-Requires:    python-configparser
-Requires:    python-bitstring
-Requires:    python-kazoo
+Requires:    python3-contrail >= %{_verstr}-%{_relstr}
 
 %description kube-manager
 Contrail kubernetes network manager package
 This package contains the kubernetes network management modules.
 %files kube-manager
-%{python_sitelib}/kube_manager*
+%{python3_sitelib}/kube_manager*
 %{_bindir}/contrail-kube-manager
 
 %post kube-manager
 set -e
-%if 0%{?rhel} >= 8
-%{__python} -m pip install --no-compile \
-  enum34 \
-  "gevent>=1.0,<1.5.0"
-%endif
-%{__python} -m pip install --no-compile \
-  "cassandra-driver>=3.16,<3.27"
+%{__python3} -m pip install --upgrade pip setuptools
+%{__python3} -m pip install --no-compile \
+  "requests" \
+  "bitstring" \
+  "bitarray" \
+  "netaddr" \
+  "greenlet" \
+  "kombu" \
+  "fysom" \
+  "stevedore" \
+  "simplejson" \
+  "bottle" \
+  "kazoo" \
+  "enum34" \
+  "gevent==22.10.1" \
+  "cassandra-driver"
 
 
 %package k8s-cni
