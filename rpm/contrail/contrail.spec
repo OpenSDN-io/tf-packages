@@ -309,13 +309,6 @@ Summary:            Config openstack
 Group:              Applications/System
 
 Requires:           contrail-config >= %{_verstr}-%{_relstr}
-%if 0%{?rhel} < 8
-Requires:           python-keystoneclient
-Requires:           python-novaclient
-Requires:           python-ironic-inspector-client
-Requires:           python-ironicclient
-%endif
-Requires:           python2-future
 Requires:           ipmitool
 # tpc
 Requires:           python-configparser
@@ -324,20 +317,19 @@ Requires:           python-configparser
 Contrail config openstack package
 This package contains the configuration management modules that interface with OpenStack.
 %files config-openstack
-%{python_sitelib}/svc_monitor*
-%{python_sitelib}/vnc_openstack*
+%{python3_sitelib}/svc_monitor*
+%{python3_sitelib}/vnc_openstack*
 %attr(755, root, root) %{_bindir}/contrail-svc-monitor
 /usr/share/contrail
 
-%if 0%{?rhel} >= 8
 %post config-openstack
 set -e
-%{__python} -m pip install --no-compile \
+%{__python3} -m pip install --no-compile \
+  future \
   python-ironicclient \
   python-ironic-inspector-client \
   python-keystoneclient \
   python-novaclient
-%endif
 
 
 %package -n python-contrail-vrouter-api
@@ -550,45 +542,16 @@ Libraries used by the Contrail Virtual Router.
 Summary: Contrail Config
 Group:              Applications/System
 
-Requires:           python-contrail >= %{_verstr}-%{_relstr}
-Requires:           python2-future
+Requires:           python3-contrail >= %{_verstr}-%{_relstr}
 Requires:           openssh-clients
 Requires:           uwsgi
 # tpc bin
-Requires:           uwsgi-plugin-python2 >= 2.0.18
-Requires:           uwsgi-plugin-python2-gevent >= 2.0.18
-Requires:           python2-bitarray >= 0.8.0
-Requires:           python2-requests >= 2.20.0
-  # tpc
-Requires:           python-attrdict
-Requires:           python-configparser
-Requires:           python-kazoo == 2.7.0
-Requires:           python-pyhash
+# No such module for py3, (not in epel-release either)
+# Requires:           uwsgi-plugin-python3 
+# Requires:           uwsgi-plugin-python2-gevent >= 2.0.18
+# Requires:           compat-openssl10 <= 1:1.0.2o  
 Requires:           xmltodict >= 0.7.0
-%if 0%{?rhel} < 8
-Requires:           python-gevent >= 1.0
-Requires:           python-amqp
-Requires:           python-crypto
-Requires:           python-jsonpickle
-Requires:           python-keystoneclient
-Requires:           python-keystonemiddleware
-Requires:           python-keystoneauth1 < 5.1.0
-Requires:           python-lxml >= 2.3.2
-Requires:           python-ncclient >= 0.3.2
-Requires:           python-psutil >= 0.6.0
-Requires:           python-pyroute2
-Requires:           python-pysnmp
-Requires:           python-subprocess32 >= 3.2.6
-Requires:           python-swiftclient
-Requires:           python-zope-interface
-Requires:           python2-docker
-Requires:           python2-jmespath
-Requires:           python2-jsonschema >= 2.5.1
 Requires:           openssl <= 1:1.0.2o
-%else
-Requires:           python2-lxml >= 2.3.2
-Requires:           compat-openssl10 <= 1:1.0.2o
-%endif
 
 %description config
 Contrail Config package
@@ -614,6 +577,7 @@ configuration state and translate the high-level data model into the lower
 level model suitable for interacting with network elements. Both these are kept
 in a NoSQL database.
 
+# TODO: Update pinning of Python requirements (!!!IMPORTANT!!!)
 %files config
 %defattr(-,contrail,contrail,-)
 %defattr(-,root,root,-)
@@ -625,49 +589,58 @@ in a NoSQL database.
 %{_bindir}/contrail-issu-run-sync
 %{_bindir}/contrail-issu-zk-sync
 %{_fabricansible}/*.tar.gz
-%{python_sitelib}/schema_transformer*
-%{python_sitelib}/vnc_cfg_api_server*
-%{python_sitelib}/contrail_api_server*
-%{python_sitelib}/ContrailConfigCli*
-%{python_sitelib}/device_manager*
-%{python_sitelib}/job_manager*
-%{python_sitelib}/device_api*
-%{python_sitelib}/abstract_device_api*
-%{python_sitelib}/contrail_issu*
+%{python3_sitelib}/schema_transformer*
+%{python3_sitelib}/vnc_cfg_api_server*
+%{python3_sitelib}/contrail_api_server*
+%{python3_sitelib}/ContrailConfigCli*
+%{python3_sitelib}/device_manager*
+%{python3_sitelib}/job_manager*
+%{python3_sitelib}/device_api*
+%{python3_sitelib}/abstract_device_api*
+%{python3_sitelib}/contrail_issu*
 %docdir /usr/share/doc/contrail-config/
 /usr/share/doc/contrail-config/
 
 %post config
 set -e
-%if 0%{?rhel} < 8
-# CEM-21188 Config requires to upgrade `python-keystonemiddleware` version.
-# To fix 'API slowness on one of the Contrail Controller' config-api requires
-# new version of keystonemiddleware library >= 5.0.0. Cause it's not present
-# in RHEL 7 repos we have to install it from python package in post steps.
-# yum dependency must stay in Requires section to install required deps
-# from yum repos.
-%{__python} -m pip install --upgrade "keystonemiddleware>=5.0.0,<7.0.0" "keystoneauth1<5.1.0"
-%else
-%{__python} -m pip install --no-compile \
-  amqp \
-  "pycrypto==2.6.1" \
-  "docker==2.4.2" \
-  "gevent>=1.0,<1.5.0" \
-  jmespath \
-  "jsonschema>=2.5.1" \
-  jsonpickle \
-  python-keystoneclient \
-  "keystonemiddleware>=5.0.0,<7.0.0" \
-  "keystoneauth1>=5.0.0,<5.1.0" \
-  "psutil>=0.6.0" \
-  "ncclient>=0.3.2" \
-  "pyroute2==0.5.19" \
-  pysnmp \
-  "PyYAML>=5.1" \
-  subprocess32 \
-  python-swiftclient \
-  zope-interface
-%endif
+
+%{__python3} -m pip install --upgrade pip setuptools
+%{__python3} -m pip install --no-compile \
+  "cityhash" \
+  "cassandra-driver" \
+  "wheel" \
+  "fysom" \
+  "bottle" \
+  "simplejson" \
+  "kombu" \
+  "configparser" \
+  "inflection" \
+  "attrdict" \
+  "bitarray" \
+  "requests" \
+  "future" \
+  "amqp" \
+  "pycrypto" \
+  "docker" \
+  "gevent" \
+  "jmespath" \
+  "jsonschema" \
+  "jsonpickle" \
+  "lxml" \
+  "python-keystoneclient" \
+  "keystonemiddleware" \
+  "keystoneauth1" \
+  "kazoo" \
+  "psutil" \
+  "ncclient" \
+  "pyroute2" \
+  "pysnmp" \
+  "PyYAML" \
+  "subprocess32" \
+  "python-swiftclient" \
+  "xmltodict" \
+  "zope-interface"
+  
 mkdir -p /etc/ansible
 last=$(ls -1 --sort=v -r %{_fabricansible}/*.tar.gz | head -n 1| xargs -i basename {})
 echo "DBG: %{_fabricansible} last tar.gz = $last"
@@ -754,7 +727,8 @@ set -e
   "stevedore<=3.3.0" \
   "kafka" \
   "kazoo == 2.7.0" \
-  "sseclient"
+  "sseclient" \
+  "bitarray"
 
 
 %package dns
