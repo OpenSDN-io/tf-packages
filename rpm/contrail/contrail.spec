@@ -607,7 +607,7 @@ set -e
 %{__python3} -m pip install --upgrade pip setuptools
 %{__python3} -m pip install --no-compile \
   "cityhash" \
-  "cassandra-driver" \
+  "cassandra-driver>=3.16,<3.27" \
   "wheel" \
   "fysom" \
   "bottle" \
@@ -853,7 +853,7 @@ set -e
   "kazoo" \
   "enum34" \
   "gevent==22.10.1" \
-  "cassandra-driver"
+  "cassandra-driver>=3.16,<3.27"
 
 
 %package k8s-cni
