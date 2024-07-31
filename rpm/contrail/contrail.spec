@@ -846,6 +846,7 @@ set -e
   "netaddr" \
   "greenlet" \
   "kombu" \
+  "keystoneauth1<5.1.0" \
   "fysom" \
   "stevedore" \
   "simplejson" \
