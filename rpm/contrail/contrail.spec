@@ -544,12 +544,12 @@ Group:              Applications/System
 
 Requires:           python3-contrail >= %{_verstr}-%{_relstr}
 Requires:           openssh-clients
-Requires:           uwsgi
 # tpc bin
+Requires:           uwsgi
+Requires:           uwsgi-plugin-python36
+Requires:           uwsgi-plugin-python36-gevent
 # No such module for py3, (not in epel-release either)
-# Requires:           uwsgi-plugin-python3 
-# Requires:           uwsgi-plugin-python2-gevent >= 2.0.18
-# Requires:           compat-openssl10 <= 1:1.0.2o  
+# Requires:           compat-openssl10 <= 1:1.0.2o
 Requires:           xmltodict >= 0.7.0
 Requires:           openssl <= 1:1.0.2o
 
