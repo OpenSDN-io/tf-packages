@@ -26,7 +26,7 @@ Vendor:         Juniper Networks Inc
 BuildArch:      noarch
 
 BuildRequires: bison
-BuildRequires: boost-devel = 1.53.0
+BuildRequires: boost169-devel = 1.69.0
 BuildRequires: flex
 BuildRequires: gcc-c++
 

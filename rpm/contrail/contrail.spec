@@ -50,7 +50,7 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: bison
 # tpc
-BuildRequires: boost-devel = 1.53.0
+BuildRequires: boost169-devel
 BuildRequires: cassandra-cpp-driver
 BuildRequires: cassandra-cpp-driver-devel
 #
@@ -404,6 +404,8 @@ Group:              Applications/System
 
 Requires:           contrail-lib >= %{_verstr}-%{_relstr}
 Requires:           xmltodict >= 0.7.0
+Requires:           boost169
+Requires:           boost169-devel
 
 %description vrouter-agent
 Contrail Virtual Router Agent package
@@ -441,6 +443,8 @@ Group:            Applications/System
 Requires:         contrail-lib >= %{_verstr}-%{_relstr}
 Requires:         authbind
 Requires:         xmltodict >= 0.7.0
+Requires:         boost169
+Requires:         boost169-devel
 
 %description control
 Contrail Control package
@@ -666,6 +670,8 @@ Requires:           librdkafka1 >= 1.5.0
 Requires:           python3-net-snmp
 Requires:           xmltodict >= 0.7.0
 Requires:           python3-devel
+Requires:           boost169
+Requires:           boost169-devel
 # TODO: Remove gcc requirements
 Requires:           gcc-c++
 Requires:           gcc
@@ -739,6 +745,8 @@ Requires:           authbind
 Requires:           python2-future
 # tpc
 Requires:           python-configparser
+Requires:           boost169
+Requires:           boost169-devel
 
 %description dns
 Contrail dns  package

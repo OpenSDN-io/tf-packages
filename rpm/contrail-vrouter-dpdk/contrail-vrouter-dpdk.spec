@@ -55,7 +55,7 @@ License:    Commercial
 URL:        http://www.juniper.net/
 Vendor:     Juniper Networks Inc
 
-BuildRequires: boost-devel = 1.53.0
+BuildRequires: boost169-devel = 1.69.0
 BuildRequires: liburcu-devel
 BuildRequires: numactl-devel
 BuildRequires: libnl3-devel
