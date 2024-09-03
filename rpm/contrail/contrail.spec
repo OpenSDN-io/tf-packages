@@ -154,7 +154,7 @@ pushd %{_sbtop}
 scons --opt=%{_sconsOpt} -U nova-contrail-vif
 popd
 pushd %{_sbtop}/build/noarch/nova_contrail_vif
-%{__python} setup.py install --root=%{buildroot} --no-compile
+%{__python3} setup.py install --root=%{buildroot} --no-compile
 popd
 
 # contrail-docs
@@ -778,9 +778,9 @@ Contrail Nova Vif driver package
 
 %files nova-vif
 %defattr(-,root,root,-)
-%{python_sitelib}/nova_contrail_vif*
-%{python_sitelib}/vif_plug_vrouter
-%{python_sitelib}/vif_plug_contrail_vrouter
+%{python3_sitelib}/nova_contrail_vif*
+%{python3_sitelib}/vif_plug_vrouter
+%{python3_sitelib}/vif_plug_contrail_vrouter
 
 
 %package utils
