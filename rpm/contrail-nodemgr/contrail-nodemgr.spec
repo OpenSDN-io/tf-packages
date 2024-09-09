@@ -92,6 +92,6 @@ popd
 %post
 set -e
 %{__python3} -m pip install --no-compile \
-  'bottle>= 0.12.21' 'psutil!=5.5.0,!=5.5.1,>=0.6.0' 'gevent<1.5.0' 'fysom' 'PyYAML>=5.1,<6' 'netaddr<1'
+  'bottle<0.13' 'psutil!=5.5.0,!=5.5.1,>=0.6.0' 'gevent<1.5.0' 'fysom' 'PyYAML>=5.1,<6' 'netaddr<1'
 
 %changelog
