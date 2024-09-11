@@ -14,9 +14,6 @@ Version:    %{_verstr}
 Release:    %{_relstr}%{?dist}
 Summary:    Contrail Heat Resources and Templates%{?_gitVer}
 
-%if 0%{?rhel} < 8
-Requires:   python-gevent
-%endif
 
 Group:      Applications/System
 License:    Commercial
@@ -24,7 +21,6 @@ URL:        http://www.juniper.net/
 Vendor:     Juniper Networks Inc
 
 BuildArch: noarch
-BuildRequires: python2-setuptools
 BuildRequires: python3-setuptools
 
 %description
@@ -36,16 +32,9 @@ Contrail Heat Resources and Templates package
 
 %install
 pushd %{_sbtop}/openstack/contrail-heat
-%{__python} setup.py install --root=%{buildroot} --no-compile
+%{__python3} setup.py install --root=%{buildroot} --no-compile
 popd
 
 %files
 %defattr(-,root,root,-)
-%{python_sitelib}/contrail_heat*
-
-%if 0%{?rhel} >= 8
-%post
-set -e
-%{__python} -m pip install --no-compile \
-  "gevent>=1.0,<1.5.0"
-%endif
+%{python3_sitelib}/contrail_heat*

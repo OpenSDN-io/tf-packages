@@ -9,6 +9,7 @@
 %define         _verstr      1
 %endif
 
+
 Name:        neutron-plugin-contrail
 Version:      %{_verstr}
 Release:      %{_relstr}%{?dist}
@@ -30,14 +31,14 @@ Contrail Neutron Plugin and Extensions package
 
 %install
 pushd %{_sbtop}openstack/neutron_plugin
-%{__python} setup.py install --root=%{buildroot} --no-compile
+%{__python3} setup.py install --root=%{buildroot} --no-compile
 install -d -m 755 %{buildroot}%{_sysconfdir}/neutron/plugins/opencontrail
 install -p -m 755 etc/neutron/plugins/opencontrail/ContrailPlugin.ini %{buildroot}/etc/neutron/plugins/opencontrail/ContrailPlugin.ini
 popd
 
 %files
 %defattr(-,root,root,-)
-%{python_sitelib}/neutron_plugin_contrail*
+%{python3_sitelib}/neutron_plugin_contrail*
 %config(noreplace) %{_sysconfdir}/neutron
 
 %post
