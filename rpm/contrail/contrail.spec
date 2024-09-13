@@ -57,7 +57,6 @@ BuildRequires: cassandra-cpp-driver-devel
 BuildRequires: cmake
 BuildRequires: cyrus-sasl-devel
 BuildRequires: flex
-BuildRequires: python2-future
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: grok-devel
@@ -87,15 +86,6 @@ BuildRequires: protobuf
 BuildRequires: protobuf-compiler
 BuildRequires: protobuf-devel
 BuildRequires: python3-devel
-%if 0%{?rhel} < 8
-BuildRequires: python-devel
-BuildRequires: python-lxml
-%else
-BuildRequires: python2-devel
-BuildRequires: python2-lxml
-%endif
-BuildRequires: python2-requests >= 2.20.0
-BuildRequires: python2-setuptools
 BuildRequires: python3-setuptools
 BuildRequires: systemd-units
 BuildRequires: tbb-devel
@@ -172,15 +162,7 @@ for mod_dir in %{buildroot}/usr/share/doc/contrail-docs/html/messages/*; do \
 done
 
 # Index files
-%{__python} %{_sbtop}/tools/packages/utils/generate_doc_index.py %{buildroot}/usr/share/doc/contrail-docs/html/messages
-# contrail-cli
-install -d -m 0755 %{buildroot}/etc/bash_completion.d
-%{__python} %{_sbtop}/tools/packages/utils/generate_cli_commands.py %{_sbtop}/build/%{_sconsOpt}/utils/contrail-cli %{buildroot}
-pushd %{_sbtop}/build/%{_sconsOpt}/utils/contrail-cli/contrail_cli; %{__python} setup.py install --root=%{buildroot} --no-compile; popd
-pushd %{_sbtop}/build/%{_sconsOpt}/utils/contrail-cli/contrail_analytics_cli; %{__python} setup.py install --root=%{buildroot} --no-compile; popd
-pushd %{_sbtop}/build/%{_sconsOpt}/utils/contrail-cli/contrail_config_cli; %{__python} setup.py install --root=%{buildroot} --no-compile; popd
-pushd %{_sbtop}/build/%{_sconsOpt}/utils/contrail-cli/contrail_control_cli; %{__python} setup.py install --root=%{buildroot} --no-compile; popd
-pushd %{_sbtop}/build/%{_sconsOpt}/utils/contrail-cli/contrail_vrouter_cli; %{__python} setup.py install --root=%{buildroot} --no-compile; popd
+%{__python3} %{_sbtop}/tools/packages/utils/generate_doc_index.py %{buildroot}/usr/share/doc/contrail-docs/html/messages
 
 #Needed for agent container env
 # install vrouter.ko at /opt/contrail/vrouter-kernel-modules to use with containers
@@ -310,8 +292,6 @@ Group:              Applications/System
 
 Requires:           contrail-config >= %{_verstr}-%{_relstr}
 Requires:           ipmitool
-# tpc
-Requires:           python-configparser
 
 %description config-openstack
 Contrail config openstack package
@@ -742,9 +722,6 @@ Summary:            Contrail Dns
 Group:              Applications/System
 
 Requires:           authbind
-Requires:           python2-future
-# tpc
-Requires:           python-configparser
 Requires:           boost169
 Requires:           boost169-devel
 
@@ -774,7 +751,7 @@ fi
 %{_bindir}/contrail-rndc
 %{_bindir}/contrail-rndc-confgen
 %attr(755, root, root) %{_bindir}/contrail-dns*
-%docdir %{python2_sitelib}/doc/*
+%docdir %{python3_sitelib}/doc/*
 
 
 %package nova-vif
@@ -842,7 +819,7 @@ set -e
   "requests" \
   "bitstring" \
   "bitarray" \
-  "netaddr" \
+  "netaddr<1" \
   "greenlet" \
   "kombu" \
   "keystoneauth1" \

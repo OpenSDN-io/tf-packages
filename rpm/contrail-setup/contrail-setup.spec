@@ -1,7 +1,6 @@
 %define       _contrailopt /opt/contrail
 %define       _distropkgdir %{_sbtop}tools/packages/rpm/%{name}
 %define       _provdir      %{_sbtop}tools/provisioning
-%define       _is_centos65  %(grep -c 6.5 /etc/issue)
 
 %if 0%{?_buildTag:1}
 %define       _relstr  %{_buildTag}
@@ -37,28 +36,9 @@ Vendor:       Juniper Networks Inc
 
 Requires:      tar
 Requires:      gcc
-%if 0%{?rhel} < 8
-Requires:      python-netifaces
-Requires:      python-devel
-Requires:      python-netaddr
-Requires:      python-argparse
 Requires:      openstack-utils
-%else
-Requires:      python2-devel
-%endif
 Requires:      crudini
-%if 0%{?suse_version}
-Requires:     python-pycrypto
-%endif
-%if 0%{?rhel}
-Requires:      gdb
-%endif
-Requires:     net-tools
-%if 0%{?_is_centos65} == 1
-Requires:     kexec-tools
-%endif
-
-BuildRequires:  systemd-units
+Requires:      net-tools
 
 %description
 Contrail Setup package with scripts for provisioning
@@ -99,12 +79,10 @@ install -d -m 755 %{buildroot}/etc/contrail
 
 %post
 set -e
-%if 0%{?rhel} >= 8
-%{__python} -m pip install --no-compile \
+%{__python3} -m pip install --no-compile \
     argparse\
-    netaddr \
+    "netaddr<1" \
     netifaces
-%endif
 cd %{_contrailopt}
 tar xzvf cfgm_utils.tgz
 tar xzvf dns_scripts.tgz -C utils
@@ -125,6 +103,8 @@ ln -sbf %{_contrailopt}/bin/* %{_bindir}
 %dir %attr(0777, contrail, contrail) %{_localstatedir}/log/contrail
 
 %changelog
+* Fri Sep 13 2024 Anddrey Pavlov <apavlov@progmaticlab.compile
+- use python3 for all
 * Wed Aug 21 2019 Dheeraj Gautam <dgautam@juniper.net>
 - Removed contrail-provisioning and call to create_pkg_list_file.py
 * Mon Dec 14 2015 Nagendra Maynattamai <npchandran@juniper.net>

@@ -199,11 +199,11 @@ class DocIndexGenerator(object):
                             minfo["href"]))
                     else:
                         object_list[minfo["object"]] = [(mname, minfo["href"])]
-            for obj, minfo_list in object_list.iteritems():
+            for obj, minfo_list in object_list.items():
                 fp.write("<tr><td>" + obj + "</td>")
                 first = True
                 for minfo in minfo_list:
-                    print minfo
+                    print(minfo)
                     if first:
                         fp.write("<td>")
                     fp.write("<a href=\"" + minfo[1] + "\">" + minfo[0] +
@@ -266,7 +266,7 @@ class DocIndexGenerator(object):
                             sdict = json.loads(sfp.read())
                             # Update the href to include dirname
                             mdict = sdict["messages"]
-                            for minfo in mdict.itervalues():
+                            for minfo in mdict.values():
                                 minfo["href"] = dirname + "/" + minfo["href"]
                             schema_dict["messages"].update(mdict)
             # Now write the list file - HTML and DOC schema
@@ -331,7 +331,7 @@ class DocIndexGenerator(object):
 
 def main():
     if len(sys.argv) != 2:
-        print 'Usage is python doc_index_generator.py <directory>'
+        print('Usage is python doc_index_generator.py <directory>')
         exit(-1)
     doc_index_generator = DocIndexGenerator(sys.argv[1])
     doc_index_generator.run()

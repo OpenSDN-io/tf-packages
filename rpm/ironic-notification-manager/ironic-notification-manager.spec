@@ -30,14 +30,6 @@ BuildRequires: boost169-devel = 1.69.0
 BuildRequires: flex
 BuildRequires: gcc-c++
 
-%if 0%{?rhel} < 8
-Requires: python-ironicclient
-Requires: python-keystoneclient >= 0.2.0
-Requires: python-gevent
-Requires: python-netaddr
-Requires: python-kombu
-%endif
-
 Requires: python3-contrail >= %{_verstr}-%{_relstr}
 
 %description
@@ -61,8 +53,8 @@ install -d -m 755 %{buildroot}/etc/
 install -d -m 755 %{buildroot}%{_contrailetc}
 install -d -m 755 %{buildroot}/usr/
 install -d -m 755 %{buildroot}%{_binusr}
-install -d -m 755 %{buildroot}%{python_sitelib}
-install -d -m 755 %{buildroot}%{python_sitelib}/ironic-notification-manager/
+install -d -m 755 %{buildroot}%{python3_sitelib}
+install -d -m 755 %{buildroot}%{python3_sitelib}/ironic-notification-manager/
 
 # install files
 
@@ -73,7 +65,7 @@ last=$(ls -1 --sort=v -r ../dist/*.tar.gz | head -n 1| xargs -i basename {})
 echo "DBG: $(pwd)/../dist/ last tar.gz = $last"
 tar zxf ../dist/$last
 cd ${last//\.tar\.gz/}
-%{__python} setup.py install --root=%{buildroot} --no-compile %{?_venvtr}
+%{__python3} setup.py install --root=%{buildroot} --no-compile %{?_venvtr}
 cd ../..
 rm -rf dist_tmp
 popd
@@ -86,16 +78,16 @@ popd
 %defattr(-,root,root,-)
 %{_contrailetc}/ironic-notification-manager.conf
 %{_binusr}/ironic-notification-manager
-%{python_sitelib}/ironic_notification_manager
-%{python_sitelib}/ironic_notification_manager-*
+%{python3_sitelib}/ironic_notification_manager
+%{python3_sitelib}/ironic_notification_manager-*
 
 %if 0%{?rhel} >= 8
 %post
 set -e
-%{__python} -m pip install --no-compile \
+%{__python3} -m pip install --no-compile \
   "gevent>=1.0,<1.5.0" \
-  python-ironicclient \
-  "python-keystoneclient>=0.2.0" \
+  python3-ironicclient \
+  "python3-keystoneclient>=0.2.0" \
   kombu \
-  netaddr
+  "netaddr<1"
 %endif
