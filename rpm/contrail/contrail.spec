@@ -796,16 +796,7 @@ Summary: Contrail utility sctipts.
 Group: Applications/System
 
 Requires:           lsof
-%if 0%{?rhel} < 8
-Requires:           python-lxml >= 2.3.2
-%else
-Requires:           python2-lxml >= 2.3.2
-%endif
-Requires:           python2-requests >= 2.20.0
-Requires:           python2-future
-Requires:           python-contrail >= %{_verstr}-%{_relstr}
-# tpc
-Requires:           python-configparser
+Requires:           python3-contrail >= %{_verstr}-%{_relstr}
 
 %description utils
 Contrail utility sctipts package
@@ -895,72 +886,6 @@ Used for Android repo code checkout of OpenContrail
 %endif
 
 %endif
-
-%package -n python-contrail
-Summary:            Contrail Python Lib
-
-Group:             Applications/System
-Obsoletes:         contrail-api-lib <= 0.0.1
-%if 0%{?rhel} < 8
-Requires:          python-gevent >= 1.0
-%endif
-%if 0%{?rhel}
-Requires:          consistent_hash
-%else
-Requires:          python-consistent_hash
-%endif
-%if 0%{?rhel} < 8
-Requires:          python-kombu
-Requires:          python-stevedore
-Requires:          python-greenlet < 2.0.0
-Requires:          python-simplejson
-Requires:          python2-six
-%endif
-Requires:          python2-future
-Requires:          python2-futures
-# tpc bin
-Requires:          python2-bottle >= 0.11.6
-Requires:          python2-bitarray
-# tpc
-Requires:          python-attrdict
-Requires:          python-fysom
-# for cassandra-driver
-Requires:          Cython
-
-%description -n python-contrail
-Contrail Virtual Router utils package
-
-The VRouter Agent API is used to inform the VRouter agent of the association
-between local interfaces (e.g. tap/tun or veth) and the interface uuid defined
-in the OpenContrail API server.
-
-%files -n python-contrail
-%{python_sitelib}/cfgm_common*
-%{python_sitelib}/contrail_config_common*
-%{python_sitelib}/libpartition*
-%{python_sitelib}/pysandesh*
-%{python_sitelib}/sandesh-0.1*dev*
-%{python_sitelib}/sandesh_common*
-%{python_sitelib}/vnc_api*
-%{python_sitelib}/contrail_api_client*
-%{python_sitelib}/ContrailCli*
-%config(noreplace) %{_contrailetc}/vnc_api_lib.ini
-/etc/bash_completion.d/bashrc_contrail_cli
-
-%post -n python-contrail
-set -e
-%if 0%{?rhel} >= 8
-%{__python} -m pip install --no-compile \
-  "gevent>=1.0,<1.5.0" \
-  "greenlet<2.0.0" \
-  kombu \
-  simplejson \
-  "six>=1.12" \
-  stevedore
-%endif
-%{__python} -m pip install --no-compile \
-  "cassandra-driver>=3.16,<3.27"
-
 
 %package -n python3-contrail
 Summary:            Contrail Python3 Lib

@@ -38,7 +38,7 @@ Requires: python-netaddr
 Requires: python-kombu
 %endif
 
-Requires: python-contrail >= %{_verstr}-%{_relstr}
+Requires: python3-contrail >= %{_verstr}-%{_relstr}
 
 %description
 BMS Notification daemon to interface between Openstack Ironic and Contrail Analytics
