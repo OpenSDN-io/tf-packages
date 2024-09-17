@@ -456,7 +456,6 @@ eventually consistent.
 %files control
 %defattr(-,root,root,-)
 %attr(755, root, root) %{_bindir}/contrail-control*
-%{python_sitelib}/ContrailControlCli*
 
 %post control
 set -e
