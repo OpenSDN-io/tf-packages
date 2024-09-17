@@ -405,7 +405,6 @@ package provides the contrail-vrouter user space agent.
 %{_bindir}/contrail-vrouter-agent-health-check.py
 %{_bindir}/contrail_crypt_tunnel_client.py
 %{python3_sitelib}/contrail_vrouter_provisioning*
-%{python3_sitelib}/ContrailVrouterCli*
 
 %post vrouter-agent
 set -e
@@ -575,7 +574,6 @@ in a NoSQL database.
 %{python3_sitelib}/schema_transformer*
 %{python3_sitelib}/vnc_cfg_api_server*
 %{python3_sitelib}/contrail_api_server*
-%{python3_sitelib}/ContrailConfigCli*
 %{python3_sitelib}/device_manager*
 %{python3_sitelib}/job_manager*
 %{python3_sitelib}/device_api*
@@ -684,7 +682,6 @@ This information includes statistics,logs, events, and errors.
 %{python3_sitelib}/opserver*
 %{python3_sitelib}/tf_snmp_collector*
 %{python3_sitelib}/tf_topology*
-%{python3_sitelib}/ContrailAnalyticsCli*
 %{_bindir}/contrail-logs
 %{_bindir}/contrail-flows
 %{_bindir}/contrail-sessions
