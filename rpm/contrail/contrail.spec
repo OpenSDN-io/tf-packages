@@ -303,8 +303,9 @@ This package contains the configuration management modules that interface with O
 /usr/share/contrail
 
 %post config-openstack
-set -e
-%{__python3} -m pip install --no-compile \
+set -ex
+
+%{__python3} -m pip -v install --no-compile \
   future \
   python-ironicclient \
   python-ironic-inspector-client \
@@ -407,8 +408,9 @@ package provides the contrail-vrouter user space agent.
 %{python3_sitelib}/contrail_vrouter_provisioning*
 
 %post vrouter-agent
-set -e
-%{__python3} -m pip install --no-compile \
+set -ex
+
+%{__python3} -m pip -v install --no-compile \
   paramiko \
   passlib \
   xmltodict
@@ -457,7 +459,7 @@ eventually consistent.
 %attr(755, root, root) %{_bindir}/contrail-control*
 
 %post control
-set -e
+set -ex
 # Use authbind to bind contrail-control on a reserved port,
 # with contrail user privileges
 if [ ! -f /etc/authbind/byport/179 ]; then
@@ -477,7 +479,6 @@ Group:              Applications/System
 Requires:           iptables
 Requires:           iproute >= 3.1.0
 Requires:           python3-devel
-Requires:           gcc-c++
 
 
 %description -n python-opencontrail-vrouter-netns
@@ -490,9 +491,9 @@ Contrail Virtual Router NetNS package
 /etc/sudoers.d/contrail-lbaas
 
 %post -n python-opencontrail-vrouter-netns
-set -e
-%{__python3} -m pip install --upgrade pip
-%{__python3} -m pip install --no-compile \
+set -ex
+
+%{__python3} -m pip -v install --no-compile \
   "setuptools_rust" \
   "cython<3.0" \
   "netaddr<1" \
@@ -583,10 +584,9 @@ in a NoSQL database.
 /usr/share/doc/contrail-config/
 
 %post config
-set -e
+set -ex
 
-%{__python3} -m pip install --upgrade pip setuptools
-%{__python3} -m pip install --no-compile \
+%{__python3} -m pip -v install --no-compile \
   "cityhash" \
   "cassandra-driver>=3.16,<3.27" \
   "wheel" \
@@ -644,16 +644,13 @@ Requires:           cassandra-cpp-driver
 Requires:           grok
 Requires:           libzookeeper
 Requires:           librdkafka1 >= 1.5.0
-Requires:           python3-net-snmp
-Requires:           xmltodict >= 0.7.0
-Requires:           python3-devel
 Requires:           boost169
 Requires:           boost169-devel
-# TODO: Remove gcc requirements
-Requires:           gcc-c++
-Requires:           gcc
 # for cassandra-driver
 Requires:           Cython
+Requires:           libev
+Requires:           libev-devel
+Requires:           net-snmp-devel
 
 %description analytics
 Contrail Analytics package
@@ -694,23 +691,15 @@ This information includes statistics,logs, events, and errors.
 /usr/share/doc/contrail-analytics-api
 /usr/share/mibs/netsnmp
 /etc/contrail/snmp.conf
+/opt/opensdn/pip*
 
 %post analytics
-set -e
-# TODO: replace with setup from requirements.txt
-%{__python3} -m pip install --no-compile \
-  "amqp" \
-  "redis>=2.10.0" \
-  "psutil>=0.6.0" \
-  "prettytable" \
-  "future" \
-  "stevedore<=3.3.0" \
-  "cassandra-driver>=3.16,<3.27" \
-  "stevedore<=3.3.0" \
-  "kafka" \
-  "kazoo == 2.7.0" \
-  "sseclient" \
-  "bitarray"
+set -ex
+
+%{__python3} -m pip -v install --no-compile \
+  -r /opt/opensdn/pip/opserver/requirements.txt \
+  -r /opt/opensdn/pip/snmp-collector/requirements.txt \
+  -r /opt/opensdn/pip/topology/requirements.txt |& tee /tmp/pip-analytics.log
 
 
 %package dns
@@ -728,7 +717,7 @@ contrail-rndc-confgen daemons
 Provides vrouter services
 
 %post dns
-set -e
+set -ex
 # Use authbind to bind amed on a reserved port,
 # with contrail user privileges
 if [ ! -f /etc/authbind/byport/53 ]; then
@@ -809,9 +798,9 @@ This package contains the kubernetes network management modules.
 %{_bindir}/contrail-kube-manager
 
 %post kube-manager
-set -e
-%{__python3} -m pip install --upgrade pip setuptools
-%{__python3} -m pip install --no-compile \
+set -ex
+
+%{__python3} -m pip -v install --no-compile \
   "requests" \
   "bitstring" \
   "bitarray" \
@@ -866,9 +855,8 @@ Summary:            Contrail Python3 Lib
 Group:             Applications/System
 Obsoletes:         contrail-api-lib <= 0.0.1
 
-# to be able to install python deps below
-Requires:           gcc-c++
-Requires:           gcc
+Requires:          libev
+Requires:          libev-devel
 
 %description -n python3-contrail
 Contrail common python package
@@ -891,7 +879,10 @@ and common api server libraries.
 /opt/opensdn/pip*
 
 %post -n python3-contrail
-set -e
-%{__python3} -m pip install --no-compile -r /opt/opensdn/pip/api-lib/requirements.txt
-%{__python3} -m pip install --no-compile -r /opt/opensdn/pip/libpartition/requirements.txt
-%{__python3} -m pip install --no-compile -r /opt/opensdn/pip/sandesh-library/requirements.txt
+set -ex
+
+%{__python3} -m pip -v install --no-compile \
+ -r /opt/opensdn/pip/api-lib/requirements.txt \
+ -r /opt/opensdn/pip/libpartition/requirements.txt \
+ -r /opt/opensdn/pip/sandesh-library/requirements.txt \
+ -r /opt/opensdn/pip/cfgm_common/requirements.txt  |& tee /tmp/pip-common.log
