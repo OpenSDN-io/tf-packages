@@ -866,6 +866,10 @@ Summary:            Contrail Python3 Lib
 Group:             Applications/System
 Obsoletes:         contrail-api-lib <= 0.0.1
 
+# to be able to install python deps below
+Requires:           gcc-c++
+Requires:           gcc
+
 %description -n python3-contrail
 Contrail common python package
 
@@ -884,3 +888,10 @@ and common api server libraries.
 %{python3_sitelib}/vnc_api*
 %{python3_sitelib}/contrail_api_client*
 %config(noreplace) %{_contrailetc}/vnc_api_lib.ini
+/opt/opensdn/pip*
+
+%post -n python3-contrail
+set -e
+%{__python3} -m pip install --no-compile -r /opt/opensdn/pip/api-lib/requirements.txt
+%{__python3} -m pip install --no-compile -r /opt/opensdn/pip/libpartition/requirements.txt
+%{__python3} -m pip install --no-compile -r /opt/opensdn/pip/sandesh-library/requirements.txt
