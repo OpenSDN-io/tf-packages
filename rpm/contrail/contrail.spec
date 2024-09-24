@@ -324,6 +324,7 @@ Contrail Virtual Router apis package
 %files -n python-contrail-vrouter-api
 %{python3_sitelib}/contrail_vrouter_api*
 
+
 %package tools
 Summary: Contrail tools
 Group: Applications/System
@@ -411,10 +412,8 @@ package provides the contrail-vrouter user space agent.
 set -ex
 
 %{__python3} -m pip -v install --no-compile \
-  paramiko \
   passlib \
-  xmltodict
-
+  -r /opt/opensdn/pip/vrouter-provisioning/requirements.txt \
 
 
 %package control
@@ -494,19 +493,7 @@ Contrail Virtual Router NetNS package
 set -ex
 
 %{__python3} -m pip -v install --no-compile \
-  "setuptools_rust" \
-  "cython<3.0" \
-  "netaddr<1" \
-  "six" \
-  "requests" \
-  "python-barbicanclient<=5.3" \
-  "docker==2.4.2" \
-  "enum34" \
-  "eventlet" \
-  "python-keystoneclient" \
-  "pyOpenSSL" \
-  "unittest2" \
-  "websocket-client>=0.32.0"
+  -r /opt/opensdn/pip/vrouter-netns/requirements.txt \
 
 
 %package lib
