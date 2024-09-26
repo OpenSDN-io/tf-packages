@@ -478,6 +478,7 @@ Group:              Applications/System
 Requires:           iptables
 Requires:           iproute >= 3.1.0
 Requires:           python3-devel
+Requires:           python-contrail-vrouter-api
 
 
 %description -n python-opencontrail-vrouter-netns
