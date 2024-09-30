@@ -301,16 +301,13 @@ This package contains the configuration management modules that interface with O
 %{python3_sitelib}/vnc_openstack*
 %attr(755, root, root) %{_bindir}/contrail-svc-monitor
 /usr/share/contrail
+/opt/opensdn/pip*
 
 %post config-openstack
 set -ex
 
 %{__python3} -m pip -v install --no-compile \
-  future \
-  python-ironicclient \
-  python-ironic-inspector-client \
-  python-keystoneclient \
-  python-novaclient
+  -r /opt/opensdn/pip/vnc_openstack/requirements.txt \
 
 
 %package -n python-contrail-vrouter-api
@@ -521,7 +518,6 @@ Requires:           uwsgi-plugin-python36
 Requires:           uwsgi-plugin-python36-gevent
 # No such module for py3, (not in epel-release either)
 # Requires:           compat-openssl10 <= 1:1.0.2o
-Requires:           xmltodict >= 0.7.0
 Requires:           openssl <= 1:1.0.2o
 
 %description config
@@ -570,45 +566,19 @@ in a NoSQL database.
 %{python3_sitelib}/contrail_issu*
 %docdir /usr/share/doc/contrail-config/
 /usr/share/doc/contrail-config/
+/opt/opensdn/pip*
+
 
 %post config
 set -ex
 
 %{__python3} -m pip -v install --no-compile \
-  "cityhash" \
-  "cassandra-driver>=3.16,<3.27" \
-  "wheel" \
-  "fysom" \
-  "bottle<0.13" \
-  "simplejson" \
-  "kombu" \
-  "configparser" \
-  "inflection" \
-  "attrdict" \
-  "bitarray" \
-  "requests" \
-  "future" \
-  "amqp" \
-  "pycrypto" \
-  "docker" \
-  "gevent" \
-  "jmespath" \
-  "jsonschema" \
-  "jsonpickle" \
-  "lxml" \
-  "python-keystoneclient" \
-  "keystonemiddleware" \
-  "keystoneauth1" \
-  "kazoo" \
-  "psutil" \
-  "ncclient" \
-  "pyroute2" \
-  "pysnmp" \
-  "PyYAML" \
-  "subprocess32" \
-  "python-swiftclient" \
-  "xmltodict" \
-  "zope-interface"
+  -r opt/opensdn/pip/schema_transformer/requirements.txt \
+  -r opt/opensdn/pip/api_server/requirements.txt \
+  -r opt/opensdn/pip/device_manager/requirements.txt \
+  -r opt/opensdn/pip/contrail_issu/requirements.txt \
+  -r opt/opensdn/pip/svc_monitor/requirements.txt \
+  -r opt/opensdn/pip/cfgm_common/requirements.txt \
   
 mkdir -p /etc/ansible
 last=$(ls -1 --sort=v -r %{_fabricansible}/*.tar.gz | head -n 1| xargs -i basename {})
@@ -784,26 +754,13 @@ This package contains the kubernetes network management modules.
 %files kube-manager
 %{python3_sitelib}/kube_manager*
 %{_bindir}/contrail-kube-manager
+/opt/opensdn/pip*
 
 %post kube-manager
 set -ex
 
 %{__python3} -m pip -v install --no-compile \
-  "requests" \
-  "bitstring" \
-  "bitarray" \
-  "netaddr<1" \
-  "greenlet" \
-  "kombu" \
-  "keystoneauth1" \
-  "fysom" \
-  "stevedore" \
-  "simplejson" \
-  "bottle<0.13" \
-  "kazoo" \
-  "enum34" \
-  "gevent==22.10.1" \
-  "cassandra-driver>=3.16,<3.27"
+  -r opt/opensdn/pip/kube_manager/requirements.txt \
 
 
 %package k8s-cni
