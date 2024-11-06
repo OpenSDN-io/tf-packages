@@ -83,15 +83,20 @@ pushd ${last//\.tar\.gz/}
 %{__python3} setup.py install --root=%{buildroot} --no-compile
 popd
 
+mkdir -p %{buildroot}/opt/opensdn/pip/nodemgr
+ls -laR %{_build_dist}/nodemgr/opt/
+cp %{_build_dist}/nodemgr/opt/opensdn/pip/nodemgr/* %{buildroot}/opt/opensdn/pip/nodemgr/
+
 %files
 %defattr(-,root,root,-)
 %{_bindir}/contrail-nodemgr
 %{python3_sitelib}/nodemgr
 %{python3_sitelib}/nodemgr-*
+/opt/opensdn/pip*
 
 %post
 set -e
 %{__python3} -m pip install --no-compile \
-  'bottle<0.13' 'psutil!=5.5.0,!=5.5.1,>=0.6.0' 'gevent<1.5.0' 'fysom' 'PyYAML>=5.1,<6' 'netaddr<1'
+  -r /opt/opensdn/pip/nodemgr/requirements.txt
 
 %changelog
