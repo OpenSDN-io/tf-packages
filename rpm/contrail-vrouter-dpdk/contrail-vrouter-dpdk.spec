@@ -55,7 +55,11 @@ License:    Commercial
 URL:        http://www.juniper.net/
 Vendor:     Juniper Networks Inc
 
+%if 0%{?rhel} < 9
 BuildRequires: boost169-devel = 1.69.0
+%else
+BuildRequires: boost-devel
+%endif
 BuildRequires: liburcu-devel
 BuildRequires: numactl-devel
 BuildRequires: libnl3-devel
@@ -73,7 +77,7 @@ Requires: userspace-rcu = 0.10.0-3.el7
 Requires: libnl3
 Requires: numactl-libs
 
-%if %{_enableMlx} == "TRUE"
+%if "%{_enableMlx}" == "TRUE"
 BuildRequires: rdma-core-devel = 47mlnx1-1.47329
 Requires: rdma-core = 47mlnx1-1.47329
 Requires: libibverbs = 47mlnx1-1.47329
@@ -82,7 +86,7 @@ Requires: libibverbs = 47mlnx1-1.47329
 %define         _sconsAddOptsMlx    %{nil}
 %endif
 
-%if %{_enableN3K} == "TRUE"
+%if "%{_enableN3K}" == "TRUE"
 BuildRequires: json-c-devel
 %define         _sconsAddOptsN3K    --add-opts=enableN3K
 %else
@@ -141,7 +145,7 @@ install -p -m 755 %{_sbtop}/build/%{_sconsOpt}/vrouter/dpdk/x86_64-native-linuxa
 
 echo "" > %{EXTRA_FILES}
 
-%if %{_enableN3K} == "TRUE"
+%if "%{_enableN3K}" == "TRUE"
 N3KFLOW_DUMP_BINARY=$( find %{_bin_path} -name n3kflow-dump -type f 2>/dev/null | head -n 1 )
 
 if [ -n "$N3KFLOW_DUMP_BINARY" ]; then
@@ -173,7 +177,7 @@ Contrail DPDK tools for debug purposes.
 %files tools -f %{EXTRA_FILES}
 %{_bindir}/testpmd
 
-%if %{_enableN3K} == "TRUE"
+%if "%{_enableN3K}" == "TRUE"
 
 %package n3000-tools
 Summary: tools for N3000 management

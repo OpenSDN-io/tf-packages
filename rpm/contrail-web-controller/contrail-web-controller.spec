@@ -25,7 +25,12 @@ Vendor:     Juniper Networks Inc
 %if 0%{?rhel} < 8
 BuildRequires:  nodejs = 0.10.48-1contrail.el7
 %else
+%if 0%{?rhel} < 9
 BuildRequires:  nodejs = 0.10.48-1contrail.el8
+%else
+BuildRequires:  nodejs = 1:16.20.2
+BuildRequires:  npm = 1:8.19.4
+%endif
 %endif
 
 Requires:  redis
@@ -56,6 +61,12 @@ make package REPO=../contrail-web-controller,webController
 
 %install
 mkdir -p %{buildroot}%{_contrailwebsrc}
+%if 0%{?rhel} >= 9
+npm install -g coffeescript livescript
+mkdir -p %{buildroot}/usr/bin
+ln -s /usr/local/bin/coffee %{buildroot}/usr/bin/coffee
+ln -s /usr/local/bin/lsc %{buildroot}/usr/bin/lsc
+%endif
 
 pushd %{_sbtop}
 cp -rp contrail-web-controller/* %{buildroot}%{_contrailwebsrc}/
@@ -64,6 +75,10 @@ ln -s %{_libdir}/node_modules %{buildroot}%{_contrailwebsrc}/node_modules
 %files
 %defattr(-,root,root)
 %{_contrailwebsrc}/*
+%if 0%{?rhel} >= 9
+/usr/bin/coffee
+/usr/bin/lsc
+%endif
 
 %post
 %if 0%{?rhel}

@@ -1,3 +1,4 @@
+%define         __python /usr/bin/python3
 %define         _unpackaged_files_terminate_build 0
 %define         _contrailetc /etc/contrail
 %define         _contrailutils /opt/contrail/utils
@@ -20,10 +21,14 @@
 %else
 %define         _verstr      1
 %endif
+%if 0%{?rhel} >= 9
+%define         _kvers      4.18.0-305.12.1.el8_4.x86_64
+%else
 %if 0%{?_kVers:1}
 %define         _kvers      %{_kVers}
 %else
 %define         _kvers      3.10.0-1160.25.1.el7.x86_64
+%endif
 %endif
 %if 0%{?_opt:1}
 %define         _sconsOpt      %{_opt}
@@ -50,7 +55,11 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: bison
 # tpc
+%if 0%{?rhel} < 9
 BuildRequires: boost169-devel
+%else
+BuildRequires: boost-devel
+%endif
 BuildRequires: cassandra-cpp-driver
 BuildRequires: cassandra-cpp-driver-devel
 #
@@ -59,7 +68,6 @@ BuildRequires: cyrus-sasl-devel
 BuildRequires: flex
 BuildRequires: gcc
 BuildRequires: gcc-c++
-BuildRequires: grok-devel
 %if ! 0%{?rhel}
 BuildRequires: python3-sphinx
 BuildRequires: python3-requests
@@ -79,8 +87,12 @@ BuildRequires: make
 BuildRequires: openssl <= 1:1.0.2o
 BuildRequires: openssl-devel <= 1:1.0.2o
 %else
-BuildRequires: compat-openssl10 <= 1:1.0.2o
+%if 0%{?rhel} < 9
+BuildRequires: openssl10 <= 1:1.0.2o
 BuildRequires: compat-openssl10-debugsource <= 1:1.0.2o
+%else
+BuildRequires: openssl
+%endif
 %endif
 BuildRequires: protobuf
 BuildRequires: protobuf-compiler
@@ -137,6 +149,12 @@ install -p -m 755 %{buildroot}/_centos/tmp/contrail-vrouter*.tar.gz %{buildroot}
 rm %{buildroot}/_centos/tmp/contrail-vrouter*.tar.gz
 rm -rf %{buildroot}/_centos
 popd
+
+# in rocky9 bind libs are for some reason out of %{buildroot}%{_libdir} dir
+%if 0%{?rhel} >= 9
+mkdir -p %{buildroot}%{_libdir}
+cp -a /root/work/build/lib/lib*.so* %{buildroot}%{_libdir}/
+%endif
 
 # contrail-docs
 # Move schema specific files to opserver
@@ -203,8 +221,6 @@ Group:              Applications/System
 
 Requires:           contrail-vrouter-agent >= %{_verstr}-%{_relstr}
 Requires:           contrail-lib >= %{_verstr}-%{_relstr}
-# tpc
-Requires:           xmltodict >= 0.7.0
 
 %description vrouter
 vrouter kernel module
@@ -311,9 +327,15 @@ Summary:            Contrail vRouter
 Group:              Applications/System
 
 Requires:           contrail-lib >= %{_verstr}-%{_relstr}
-Requires:           xmltodict >= 0.7.0
+%if 0%{?rhel} < 9
 Requires:           boost169
 Requires:           boost169-devel
+%else
+Requires:           boost
+Requires:           boost-devel
+%endif
+
+%{?python_disable_dependency_generator}
 
 %description vrouter-agent
 Contrail Virtual Router Agent package
@@ -325,7 +347,9 @@ package provides the contrail-vrouter user space agent.
 %files vrouter-agent
 %defattr(-, root, root)
 %attr(755, root, root) %{_bindir}/contrail-vrouter-agent*
+%if 0%{?rhel} < 9
 %{_bindir}/contrail-tor-agent*
+%endif
 %{_bindir}/vrouter-port-control
 %{_bindir}/contrail-vrouter-agent-health-check.py
 %{_bindir}/contrail_crypt_tunnel_client.py
@@ -337,9 +361,13 @@ Group:            Applications/System
 
 Requires:         contrail-lib >= %{_verstr}-%{_relstr}
 Requires:         authbind
-Requires:         xmltodict >= 0.7.0
-Requires:         boost169
-Requires:         boost169-devel
+%if 0%{?rhel} < 9
+Requires:           boost169
+Requires:           boost169-devel
+%else
+Requires:           boost
+Requires:           boost-devel
+%endif
 
 %description control
 Contrail Control package
@@ -388,12 +416,17 @@ Summary:  Libraries used by the Contrail Virtual Router %{?_gitVer}
 Group:              Applications/System
 Obsoletes:          contrail-libs <= 0.0.1
 
+%{?python_disable_dependency_generator}
+
 %description lib
 Libraries used by the Contrail Virtual Router.
 
 %files lib
 %defattr(-,root,root)
 %{_libdir}/../lib/lib*.so*
+%if 0%{?rhel} >= 9
+%{_libdir}/lib*.so*
+%endif
 
 
 %package fabric-ansible
@@ -428,11 +461,15 @@ Requires:           protobuf
 Requires:           redis >= 2.6.13-1
 #tpc
 Requires:           cassandra-cpp-driver
-Requires:           grok
 Requires:           libzookeeper
 Requires:           librdkafka1 >= 1.5.0
+%if 0%{?rhel} < 9
 Requires:           boost169
 Requires:           boost169-devel
+%else
+Requires:           boost
+Requires:           boost-devel
+%endif
 
 %description analytics
 Contrail Analytics package
@@ -463,8 +500,13 @@ Summary:            Contrail Dns
 Group:              Applications/System
 
 Requires:           authbind
+%if 0%{?rhel} < 9
 Requires:           boost169
 Requires:           boost169-devel
+%else
+Requires:           boost
+Requires:           boost-devel
+%endif
 
 %description dns
 Contrail dns  package

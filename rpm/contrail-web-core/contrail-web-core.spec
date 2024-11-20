@@ -35,11 +35,19 @@ BuildRequires:  nodejs = 0.10.48-1contrail.el7
 Requires:       nodejs = 0.10.48-1contrail.el7
 Requires:       openssl <= 1:1.0.2o
 %else
+%if 0%{?rhel} < 9
 BuildRequires:  nodejs = 0.10.48-1contrail.el8
 Requires:       nodejs = 0.10.48-1contrail.el8
 Requires:       compat-openssl10 <= 1:1.0.2o
+%else
+BuildRequires:  nodejs = 1:16.20.2
+Requires:       nodejs = 1:16.20.2
+BuildRequires:  npm = 1:8.19.4
+Requires:       npm = 1:8.19.4
+Requires:       openssl
 %endif
-    
+%endif
+
 
 Obsoletes:        contrail-webui >= 0
 
@@ -65,6 +73,13 @@ pushd %{_sbtop}contrail-web-core
 make package REPO=../contrail-web-core
 
 %install
+%if 0%{?rhel} >= 9
+npm install -g coffeescript livescript
+mkdir -p %{buildroot}/usr/bin
+ln -s /usr/local/bin/coffee %{buildroot}/usr/bin/coffee
+ln -s /usr/local/bin/lsc %{buildroot}/usr/bin/lsc
+%endif
+
 rm -rf %{buildroot}%{_contrailwebsrc}
 rm -rf %{buildroot}%{_libdir}/node_modules
 rm -rf %{buildroot}%{_contrailetc}
@@ -96,6 +111,10 @@ ln -s %{_contrailetc}/contrail-webui-userauth.js %{buildroot}%{_contrailwebsrc}/
 %{_libdir}/*
 %config(noreplace) %{_contrailetc}/config.global.js
 %config(noreplace) %{_contrailetc}/contrail-webui-userauth.js
+%if 0%{?rhel} >= 9
+/usr/bin/coffee
+/usr/bin/lsc
+%endif
 
 %pre
 if [ ! -e %{_websslpath} ]; then
