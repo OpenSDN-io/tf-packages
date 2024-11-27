@@ -725,6 +725,12 @@ Contrail utility sctipts package
 %defattr(-, root, root)
 /usr/share/contrail-utils/*
 
+%post utils
+set -ex
+
+%{__python3} -m pip -v install --no-compile \
+ -r /opt/opensdn/pip/utils/requirements.txt
+
 
 %package docs
 Summary: Documentation for OpenContrail
