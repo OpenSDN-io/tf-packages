@@ -85,6 +85,7 @@ popd
 %post
 set -e
 %{__python3} -m pip install --no-compile \
+  -r /opt/opensdn/pip/ironic/requirements.txt
   "gevent>=1.0,<1.5.0" \
   python3-ironicclient \
   "python3-keystoneclient>=0.2.0" \

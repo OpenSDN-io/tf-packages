@@ -35,9 +35,6 @@ URL:          http://www.juniper.net/
 Vendor:       Juniper Networks Inc
 
 Requires:      tar
-Requires:      gcc
-Requires:      openstack-utils
-Requires:      crudini
 Requires:      net-tools
 
 %description
@@ -78,15 +75,11 @@ install -p -m 644 %{_builddir}/dns_scripts.tgz  %{buildroot}%{_contrailopt}/dns_
 install -d -m 755 %{buildroot}/etc/contrail
 
 %post
-set -e
-%{__python3} -m pip install --no-compile \
-    argparse\
-    "netaddr<1" \
-    netifaces
 cd %{_contrailopt}
 tar xzvf cfgm_utils.tgz
 tar xzvf dns_scripts.tgz -C utils
-rm -f %{_contrailopt}/bin/openstack-db %{_contrailopt}/bin/openstack-config
+%{__python3} -m pip install --no-compile \
+  -r utils/requirements.txt
 ln -sbf %{_contrailopt}/bin/* %{_bindir}
 
 %files
