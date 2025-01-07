@@ -124,7 +124,6 @@ rpm-%:
 
 # depends to enable -j x option for make
 rpm-contrail-web-core: rpm-contrail-web-controller
-rpm-ironic-notification-manager: rpm-contrail
 
 list:
 	@echo $(sort $(patsubst rpm-%,%,$(PACKAGES)))
