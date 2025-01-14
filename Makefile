@@ -114,9 +114,6 @@ ifeq ($(CONTRAIL_BUILD_FROM_SOURCE),true)
 	rpmbuild --noclean -bb --with testdepsonly $(RPMBUILD_FLAGS) $(SPEC_DIR)/contrail/contrail.spec
 endif
 
-rpm-contrail-tripleo-puppet:
-	rpmbuild -bb $(RPMBUILD_FLAGS) $(SPEC_DIR)/contrail-tripleo-puppet/contrail-tripleo-puppet.spec
-
 rpm-%:
 	$(eval SPECFILE = $(filter %/$(patsubst rpm-%,%.spec,$@), $(SPEC_FILES)))
 	echo RPM build for $(SPECFILE) RPMBUILD_MODE=$(RPMBUILD_MODE) RPMBUILD_FLAGS=$(RPMBUILD_FLAGS) ...
