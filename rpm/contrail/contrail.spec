@@ -268,6 +268,7 @@ It will be available in contrail-tools container
 %{_bindir}/nh
 %{_bindir}/rt
 %{_bindir}/vrfstats
+%{_bindir}/vrcli
 %{_bindir}/vif
 %{_bindir}/vxlan
 %{_bindir}/vrouter
