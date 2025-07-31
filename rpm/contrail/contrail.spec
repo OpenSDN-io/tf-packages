@@ -60,8 +60,14 @@ BuildRequires: boost169-devel
 %else
 BuildRequires: boost-devel
 %endif
-BuildRequires: cassandra-cpp-driver
-BuildRequires: cassandra-cpp-driver-devel
+%if 0%{?rhel} >= 9
+# 2.17.1 version has bug with callbacks, doesn't work
+BuildRequires: cassandra-cpp-driver = 1:2.17.0
+BuildRequires: cassandra-cpp-driver-devel = 1:2.17.0
+%else
+BuildRequires: cassandra-cpp-driver = 2.7.1
+BuildRequires: cassandra-cpp-driver-devel = 2.7.1
+%endif
 #
 BuildRequires: cmake
 BuildRequires: cyrus-sasl-devel
@@ -460,7 +466,12 @@ Group:              Applications/System
 Requires:           protobuf
 Requires:           redis >= 2.6.13-1
 #tpc
-Requires:           cassandra-cpp-driver
+%if 0%{?rhel} >= 9
+# 2.17.1 version has bug with callbacks, doesn't work
+Requires: cassandra-cpp-driver = 1:2.17.0
+%else
+Requires: cassandra-cpp-driver = 2.7.1
+%endif
 Requires:           libzookeeper
 Requires:           librdkafka1 >= 1.5.0
 %if 0%{?rhel} < 9
