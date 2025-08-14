@@ -6,6 +6,14 @@
 %define         _distropkgdir %{_sbtop}tools/packages/rpm/%{name}
 %define         _contraildns /etc/contrail/dns
 
+# Force RPM payload compression to gzip for EL7 compatibility.
+# Rocky/RHEL9 rpmbuild defaults to zstd-compressed payloads, but CentOS 7 ships
+# rpm 4.11 which cannot decompress zstd. This causes installs to fail with
+# "cpio: Bad magic".
+# TODO(tikitavi): get rid of
+%define _binary_payload w9.gzdio
+%define _source_payload w9.gzdio
+
 %if 0%{?_kernel_dir:1}
 %define         _osVer  %(cat %{_kernel_dir}/include/linux/utsrelease.h | cut -d'"' -f2)
 %else
